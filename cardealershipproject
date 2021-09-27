@@ -1,0 +1,175 @@
+CREATE TABLE customer(
+	customer_id SERIAL PRIMARY KEY,
+	first_name VARCHAR(100),
+	last_name VARCHAR(100),
+	phone VARCHAR(15),
+	email VARCHAR(100),
+	payment_type VARCHAR(100)
+);
+
+CREATE TABLE salesperson(
+	salesperson_id SERIAL PRIMARY KEY,
+	first_name VARCHAR(100),
+	last_name VARCHAR(100)
+);
+
+CREATE TABLE mechanic(
+	mechanic_id SERIAL PRIMARY KEY,
+	first_name VARCHAR(100),
+	last_name VARCHAR(100)
+);
+
+CREATE TABLE car(
+	car_id SERIAL PRIMARY KEY,
+	car_year INTEGER,
+	make VARCHAR(100),
+	model VARCHAR(100),
+	used_new VARCHAR(100),
+	car_price NUMERIC(9,2)	
+);
+
+CREATE TABLE parts_required(
+	parts_id SERIAL PRIMARY KEY,
+	parts_type VARCHAR(100)
+);
+
+CREATE TABLE services(
+	services_ticket_id SERIAL PRIMARY KEY,
+	mechanic_id INTEGER,
+	services_price NUMERIC(6,2),
+	parts_id INTEGER,
+	FOREIGN KEY(mechanic_id) REFERENCES mechanic(mechanic_id),
+	FOREIGN KEY(parts_id) REFERENCES parts_required(parts_id)
+);
+
+CREATE TABLE invoice(
+	invoice_id SERIAL PRIMARY KEY,
+	customer_id INTEGER,
+	car_id INTEGER,
+	services_ticket_id INTEGER,
+	salesperson_id INTEGER,
+	FOREIGN KEY(customer_id) REFERENCES customer(customer_id),
+	FOREIGN KEY(car_id) REFERENCES car(car_id),
+	FOREIGN KEY(services_ticket_id) REFERENCES services(services_ticket_id),
+	FOREIGN KEY(salesperson_id) REFERENCES salesperson(salesperson_id)
+);
+
+CREATE TABLE car_history(
+	car_history_id SERIAL PRIMARY KEY,
+	invoice_id INTEGER,
+	mechanic_id INTEGER,
+	FOREIGN KEY(invoice_id) REFERENCES invoice(invoice_id),
+	FOREIGN KEY(mechanic_id) REFERENCES mechanic(mechanic_id)
+);
+
+INSERT INTO customer(customer_id, first_name, last_name, phone, email, payment_type)
+VALUES(1, 'Haynes', 'Lond', '1-800-000-0001', 'abc@123.com', 'CASH');
+INSERT INTO customer(customer_id, first_name, last_name, phone, email, payment_type)
+VALUES(2, 'Lynn', 'Wiesel', '1-800-000-0002', 'def@123.com', 'ELECTRONIC BANK TRANSFER');
+INSERT INTO customer(customer_id, first_name, last_name, phone, email, payment_type)
+VALUES(3, 'Saul', 'Chalker', '1-800-000-0003', 'ghi@123.com', 'ELECTRONIC BANK TRANSFER');
+INSERT INTO customer(customer_id, first_name, last_name, phone, email, payment_type)
+VALUES(4, 'Danielle', 'Martinez', '1-800-000-0004', 'jkl@123.com', 'VISA DEBIT CARD');
+INSERT INTO customer(customer_id, first_name, last_name, phone, email, payment_type)
+VALUES(5, 'Kai Rees', 'Ibsen', '1-800-000-0005', 'mno@123.com', 'PIONEER WORLD DEBIT CARD');
+INSERT INTO customer(customer_id, first_name, last_name, phone, email, payment_type)
+VALUES(6, 'Jane', 'Swanson', '1-800-000-0006', 'pqr@123.com', 'OPENSKY®SECUREDVISA®CREDIT CARD');
+SELECT * FROM customer;
+
+INSERT INTO salesperson(salesperson_id, first_name, last_name)
+VALUES(1, 'Havanah', 'Schuster');
+INSERT INTO salesperson(salesperson_id, first_name, last_name)
+VALUES(2, 'Judah', 'Swiss');
+INSERT INTO salesperson(salesperson_id, first_name, last_name)
+VALUES(3, 'Harleyze', 'Barron');
+INSERT INTO salesperson(salesperson_id, first_name, last_name)
+VALUES(4, 'Chung', 'Zhang');
+SELECT * FROM salesperson;
+
+INSERT INTO mechanic(mechanic_id, first_name, last_name)
+VALUES(1, 'Nozizway', 'Rounduhcar');
+INSERT INTO mechanic(mechanic_id, first_name, last_name)
+VALUES(2, 'Handy', 'Frannie');
+INSERT INTO mechanic(mechanic_id, first_name, last_name)
+VALUES(3, 'Fixie', 'Trixie');
+INSERT INTO mechanic(mechanic_id, first_name, last_name)
+VALUES(4, 'Carl', 'Beaurater');
+SELECT * FROM mechanic;
+
+INSERT INTO car(car_id, car_year, make, model, used_new, car_price)
+VALUES(1, 2021, 'Aston Martin', 'DBS Superleggera', 'new', 304995.00);
+INSERT INTO car(car_id, car_year, make, model, used_new, car_price)
+VALUES(2, 2021, 'Bugatti', 'Chiron Super Sport 300+', 'new', 4000000.00);
+INSERT INTO car(car_id, car_year, make, model, used_new, car_price)
+VALUES(3, 2021, 'Bugatti', 'Divo', 'new', 5400000.00);
+INSERT INTO car(car_id, car_year, make, model, used_new, car_price)
+VALUES(4, 2020, 'Chevrolet', 'Corvette', 'new', 58900.00);
+INSERT INTO car(car_id, car_year, make, model, used_new, car_price)
+VALUES(5, 2020, 'Dodge', 'Charger SRT Hellcat Widebody', 'new', 71140.00);
+INSERT INTO car(car_id, car_year, make, model, used_new, car_price)
+VALUES(6, 2021, 'Honda', 'Civic Type R', 'new', 37495.00);
+SELECT * FROM car;
+
+INSERT INTO parts_required(parts_id, parts_type)
+VALUES(1, 'Air Filter');
+INSERT INTO parts_required(parts_id, parts_type)
+VALUES(2, 'Fuel Filter');
+INSERT INTO parts_required(parts_id, parts_type)
+VALUES(3, 'Spark Plug');
+INSERT INTO parts_required(parts_id, parts_type)
+VALUES(4, 'Alternator');
+INSERT INTO parts_required(parts_id, parts_type)
+VALUES(5, 'Starter');
+INSERT INTO parts_required(parts_id, parts_type)
+VALUES(6, 'Battery');
+INSERT INTO parts_required(parts_id, parts_type)
+VALUES(7, 'Tire');
+SELECT * FROM parts_required;
+
+INSERT INTO services(services_ticket_id, mechanic_id, services_price, parts_id)
+VALUES(1, 3, 25.00, 1);
+INSERT INTO services(services_ticket_id, mechanic_id, services_price, parts_id)
+VALUES(2, 1, 111.00, 6);
+SELECT * FROM services;
+
+INSERT INTO invoice(invoice_id, customer_id, car_id, services_ticket_id, salesperson_id)
+VALUES(1, 1, 1, NULL, 2);
+INSERT INTO invoice(invoice_id, customer_id, car_id, services_ticket_id, salesperson_id)
+VALUES(2, 3, 2, NULL, 4);
+SELECT * FROM invoice;
+
+INSERT INTO car_history(car_history_id, invoice_id, mechanic_id)
+VALUES(1, 1, NULL);
+INSERT INTO car_history(car_history_id, invoice_id, mechanic_id)
+VALUES(2, 2, NULL);
+SELECT * FROM car_history;
+
+CREATE OR REPLACE FUNCTION add_customer
+(_customer_id INTEGER, _first_name VARCHAR, _last_name VARCHAR, _phone VARCHAR, _email VARCHAR, _payment_type VARCHAR)
+RETURNS void
+AS $MAIN$
+BEGIN
+		INSERT INTO customer(customer_id, first_name, last_name, phone, email, payment_type)
+		VALUES(_customer_id, _first_name, _last_name, _phone, _email, _payment_type);
+END;
+$MAIN$
+LANGUAGE plpgsql;
+
+SELECT add_customer(7, 'Galilee', 'McDaniel', '1-800-000-0007', 'stu@123.com', 'CHECK');
+SELECT * FROM customer;
+
+
+CREATE OR REPLACE FUNCTION add_car
+(_car_id INTEGER, _car_year INTEGER, _make VARCHAR, _model VARCHAR, _used_new VARCHAR, _car_price NUMERIC)
+RETURNS void
+AS $MAIN$
+BEGIN
+		INSERT INTO car(car_id, car_year, make, model, used_new, car_price)
+		VALUES(_car_id, _car_year, _make, _model, _used_new, _car_price);
+END;
+$MAIN$
+LANGUAGE plpgsql;
+
+SELECT add_car(7, 2021, 'Hyundai', 'Veloster', 'used', 18800.00);
+SELECT * FROM car;
+
